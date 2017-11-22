@@ -38,13 +38,18 @@ class LearningAgent(Agent):
         # Update epsilon using a decay function of your choice
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
-
-        # self.epsilon = self.epsilon - env.t * 0.05
+        if self.epsilon > 0.05:
+            self.epsilon -= 0.05
+        else:
+            self.epsilon = 0.05
+        if testing == True:
+            self.alpha = 0
+            self.epsilon = 0
         return None
 
     def build_state(self):
-        """ The build_state function is called when the agent requests data from the 
-            environment. The next waypoint, the intersection inputs, and the deadline 
+        """ The build_state function is called when agent requests data from  
+            environment. The next waypoint, intersection inputs, and deadline 
             are all features available to the agent. """
 
         # Collect data about the environment
@@ -56,13 +61,13 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         
-        # NOTE : you are not allowed to engineer eatures outside of the inputs available.
-        # Because the aim of this project is to teach Reinforcement Learning, we have placed 
+        # NOTE : Do not engineer features outside inputs available.
+        # Because the aim is to teach Reinforcement Learning, we have placed 
         # constraints in order for you to learn how to adjust epsilon and alpha, and thus learn about the balance between exploration and exploitation.
-        # With the hand-engineered features, this learning process gets entirely negated.
+        # With hand-engineered features, learning process is entirely negated.
         
         # Set 'state' as a tuple of relevant data for the agent        
-        state = (inputs)
+        state = (inputs, waypoint, deadline)
 
         return state
 
@@ -75,7 +80,7 @@ class LearningAgent(Agent):
         ###########
         # Calculate the maximum Q-value of all actions for a given state
 
-        maxQ = None
+        maxQ = max(self.Q[state])
 
         return maxQ 
 
@@ -88,7 +93,7 @@ class LearningAgent(Agent):
         # When learning, check if the 'state' is not in the Q-table
         # If it is not, create a new dictionary for that state
         #   Then, for each action available, set the initial Q-value to 0.0
-
+        
         return
 
     def choose_action(self, state):
@@ -145,7 +150,7 @@ def run():
     #   verbose     - set to True to display additional output from the simulation
     #   num_dummies - discrete number of dummy agents in the environment, default is 100
     #   grid_size   - discrete number of intersections (columns, rows), default is (8, 6)
-    env = Environment(verbose=True)
+    env = Environment(verbose=False)
     
     ##############
     # Create the driving agent
@@ -169,6 +174,7 @@ def run():
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
     sim = Simulator(env, update_delay=0.01, display=True, log_metrics=True)
+    # print sim.trial
     
     ##############
     # Run the simulator
@@ -176,6 +182,6 @@ def run():
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05 
     #   n_test     - discrete number of testing trials to perform, default is 0
     sim.run(n_test=10)
-
+ 
 if __name__ == '__main__':
     run()

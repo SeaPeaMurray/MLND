@@ -248,6 +248,9 @@ class Simulator(object):
         # Report final metrics
         if self.display:
             self.pygame.display.quit()  # shut down pygame
+    
+    def prov_trial_no(self):
+        return self.trial
 
     def render_text(self, trial, testing=False):
         """ This is the non-GUI render display of the simulation. 
