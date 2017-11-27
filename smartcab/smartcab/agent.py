@@ -66,7 +66,8 @@ class LearningAgent(Agent):
         # constraints in order for you to learn how to adjust epsilon and alpha, and thus learn about the balance between exploration and exploitation.
         # With hand-engineered features, learning process is entirely negated.
         
-        # Set 'state' as a tuple of relevant data for the agent        
+        # Set 'state' as a tuple of relevant data for the agent   
+        # Commenting out or removing variables from 'state' should give sim_no learning     
         state = (inputs, waypoint, deadline)
 
         return state
@@ -94,6 +95,9 @@ class LearningAgent(Agent):
         # If it is not, create a new dictionary for that state
         #   Then, for each action available, set the initial Q-value to 0.0
         
+        if state not in self.Q:
+            self.Q[state] = 0.0
+
         return
 
     def choose_action(self, state):
